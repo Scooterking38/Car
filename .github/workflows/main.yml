@@ -4,38 +4,34 @@ on:
   workflow_dispatch:
     inputs:
       video_name:
-        description: 'The name of the video file in the /videos directory (e.g., my_video.mov)'
+        description: 'The name of the video file in the /videos directory (e.g., my_video.mp4)'
         required: true
-        default: 'my_video.mov'  # You can set a default video name if needed
+        default: 'my_video.mp4'
 
 jobs:
   count-cars:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Check out the repository
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    # Step 2: Set up Python environment
-      - name: Set up Python 3.x
+    - name: Set up Python 3.x
       uses: actions/setup-python@v2
       with:
         python-version: '3.x'
 
-    # Step 3: Install required dependencies
     - name: Install dependencies
       run: |
-        sudo apt update
-        sudo apt install -y ffmpeg  # Install ffmpeg to support video files
-        pip install opencv-python  # Install OpenCV for car counting
+        python -m pip install --upgrade pip
+        pip install opencv-python
+        sudo apt-get update
+        sudo apt-get install -y ffmpeg
 
-    # Step 4: Run the Python car counting script with the video name passed as an argument
     - name: Count cars in video
       run: |
         VIDEO_PATH="./videos/${{ github.event.inputs.video_name }}"
-        python3 count_cars.py $VIDEO_PATH  # Pass the video file path to the script
+        python count_cars.py $VIDEO_PATH
 
-    # Step 5: Print car count output
     - name: Print car count result
       run: echo "Car count completed"
