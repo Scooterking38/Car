@@ -1,9 +1,12 @@
 name: Car Counting in Video
 
 on:
-  push:
-    paths:
-      - "videos/*"  # Trigger only if a video file is added/modified in the 'videos' directory
+  workflow_dispatch:
+    inputs:
+      video_name:
+        description: 'The name of the video file in the /videos directory (e.g., my_video.mov)'
+        required: true
+        default: 'my_video.mov'  # You can set a default video name if needed
 
 jobs:
   count-cars:
@@ -24,12 +27,13 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install -y python3-opencv
+        sudo apt install -y python3-opencv ffmpeg  # Install ffmpeg to support .mov files
 
-    # Step 4: Run the Python car counting script
+    # Step 4: Run the Python car counting script with the video name passed as an argument
     - name: Count cars in video
       run: |
-        python3 count_cars.py ./videos/my_video.mp4  # Replace with your video path or dynamically detect it
+        VIDEO_PATH="./videos/${{ github.event.inputs.video_name }}"
+        python3 count_cars.py $VIDEO_PATH  # Pass the video file path to the script
 
     # Step 5: Print car count output
     - name: Print car count result
