@@ -18,7 +18,7 @@ jobs:
       uses: actions/checkout@v2
 
     # Step 2: Set up Python environment
-    - name: Set up Python 3.x
+      - name: Set up Python 3.x
       uses: actions/setup-python@v2
       with:
         python-version: '3.x'
@@ -27,7 +27,8 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install -y python3-opencv ffmpeg  # Install ffmpeg to support .mov files
+        sudo apt install -y ffmpeg  # Install ffmpeg to support video files
+        pip install opencv-python  # Install OpenCV for car counting
 
     # Step 4: Run the Python car counting script with the video name passed as an argument
     - name: Count cars in video
