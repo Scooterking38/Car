@@ -1,0 +1,36 @@
+name: Car Counting in Video
+
+on:
+  push:
+    paths:
+      - "videos/*"  # Trigger only if a video file is added/modified in the 'videos' directory
+
+jobs:
+  count-cars:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Check out the repository
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    # Step 2: Set up Python environment
+    - name: Set up Python 3.x
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    # Step 3: Install required dependencies
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y python3-opencv
+
+    # Step 4: Run the Python car counting script
+    - name: Count cars in video
+      run: |
+        python3 count_cars.py ./videos/my_video.mp4  # Replace with your video path or dynamically detect it
+
+    # Step 5: Print car count output
+    - name: Print car count result
+      run: echo "Car count completed"
