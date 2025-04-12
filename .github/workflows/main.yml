@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install opencv-python
+        pip install opencv-python requests
         sudo apt-get update
         sudo apt-get install -y ffmpeg
         wget -O /tmp/haarcascade_car.xml https://raw.githubusercontent.com/souravdeyone/OpenCV-Reference/refs/heads/master/Haarcascades/haarcascade_car.xml
