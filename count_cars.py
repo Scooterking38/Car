@@ -1,35 +1,39 @@
 import cv2
 import sys
 
-# Load the pre-trained car detection model (Haar Cascade)
-car_cascade = cv2.CascadeClassifier('/tmp/haarcascade_car.xml')
-
-# Path to the video file passed as an argument
 video_path = sys.argv[1]
 
-# Initialize video capture
-cap = cv2.VideoCapture(video_path)
+net = cv2.dnn.readNetFromCaffe(
+    'MobileNetSSD_deploy.prototxt',
+    'MobileNetSSD_deploy.caffemodel'
+)
 
-# Car counter variable
-car_count = 0
+CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
+           "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
+           "dog", "horse", "motorbike", "person", "pottedplant",
+           "sheep", "sofa", "train", "tvmonitor"]
+
+cap = cv2.VideoCapture(video_path)
+total_cars = 0
 
 while True:
-    # Capture frame by frame
     ret, frame = cap.read()
     if not ret:
         break
 
-    # Convert the frame to grayscale for better performance
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    h, w = frame.shape[:2]
+    blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)),
+                                 0.007843, (300, 300), 127.5)
 
-    # Detect cars in the frame
-    cars = car_cascade.detectMultiScale(gray, 1.1, 1)
+    net.setInput(blob)
+    detections = net.forward()
 
-    # Count the number of cars in the frame
-    car_count += len(cars)
+    for i in range(detections.shape[2]):
+        confidence = detections[0, 0, i, 2]
+        if confidence > 0.4:
+            idx = int(detections[0, 0, i, 1])
+            if CLASSES[idx] == "car":
+                total_cars += 1
 
-# Release the video capture object
 cap.release()
-
-# Output the total car count
-print(f"Total cars detected: {car_count}")
+print(f"Total cars detected: {total_cars}")
