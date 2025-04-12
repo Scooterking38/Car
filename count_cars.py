@@ -2,7 +2,7 @@ import cv2
 import sys
 
 # Load the pre-trained car detection model (Haar Cascade)
-car_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_car.xml')
+car_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + '/tmp/haarcascade_car.xml')
 
 # Path to the video file passed as an argument
 video_path = sys.argv[1]
