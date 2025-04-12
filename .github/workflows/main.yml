@@ -27,6 +27,7 @@ jobs:
         pip install opencv-python
         sudo apt-get update
         sudo apt-get install -y ffmpeg
+        wget -O /tmp/haarcascade_car.xml https://github.com/opencv/opencv/blob/master/data/haarcascades/haarcascade_car.xml?raw=true
 
     - name: Count cars in video
       run: |
