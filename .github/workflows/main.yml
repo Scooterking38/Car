@@ -1,38 +1,36 @@
-name: Car Counting in Video
+name: Count Cars
 
 on:
+  push:
+    paths:
+      - '**.py'
+      - 'video.mp4'
   workflow_dispatch:
-    inputs:
-      video_name:
-        description: 'The name of the video file in the /videos directory (e.g., my_video.mp4)'
-        required: true
-        default: 'my_video.mp4'
 
 jobs:
   count-cars:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          lfs: true
 
-    - name: Set up Python 3.x
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install opencv-python requests
-        sudo apt-get update
-        sudo apt-get install -y ffmpeg
-        wget -O /tmp/haarcascade_car.xml https://raw.githubusercontent.com/souravdeyone/OpenCV-Reference/refs/heads/master/Haarcascades/haarcascade_car.xml
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install opencv-python requests
 
-    - name: Count cars in video
-      run: |
-        VIDEO_PATH="./videos/${{ github.event.inputs.video_name }}"
-        python count_cars.py $VIDEO_PATH
+      - name: Show repo files (debug)
+        run: ls -lh
 
-    - name: Print car count result
-      run: echo "Car count completed"
+      - name: Run car counter
+        run: |
+          VIDEO_PATH="./video.mp4"
+          python count_cars.py $VIDEO_PATH
