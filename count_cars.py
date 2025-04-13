@@ -21,21 +21,19 @@ if not cap.isOpened():
     print(f"Error opening video file: {video_path}")
     sys.exit(1)
 
-# URLs for matching prototxt and caffemodel
-PROTOTXT_URL = "https://raw.githubusercontent.com/chuanqi305/MobileNet-SSD/master/deploy.prototxt"
-MODEL_URL = "https://github.com/chuanqi305/MobileNet-SSD/raw/master/MobileNetSSD_deploy.caffemodel"
+# URLs from djmv repo
+PROTOTXT_URL = "https://raw.githubusercontent.com/djmv/MobilNet_SSD_opencv/master/MobileNetSSD_deploy.prototxt"
+MODEL_URL = "https://github.com/djmv/MobilNet_SSD_opencv/raw/master/MobileNetSSD_deploy.caffemodel"
 
 PROTOTXT_PATH = "deploy.prototxt"
 MODEL_PATH = "MobileNetSSD_deploy.caffemodel"
 
-# Download model files if they don't exist
 if not os.path.exists(PROTOTXT_PATH):
     download_file(PROTOTXT_URL, PROTOTXT_PATH)
 
 if not os.path.exists(MODEL_PATH):
     download_file(MODEL_URL, MODEL_PATH)
 
-# Load model
 net = cv2.dnn.readNetFromCaffe(PROTOTXT_PATH, MODEL_PATH)
 
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
@@ -52,7 +50,7 @@ while True:
         break
 
     frame_count += 1
-    if frame_count % 5 != 0:  # Only analyze every 5th frame
+    if frame_count % 5 != 0:
         continue
 
     (h, w) = frame.shape[:2]
