@@ -3,9 +3,9 @@ import sys
 import os
 import requests
 
-# Correct URLs
+# Fixed URLs
 PROTO_URL = 'https://raw.githubusercontent.com/chuanqi305/MobileNet-SSD/master/deploy.prototxt'
-MODEL_URL = 'https://github.com/chuanqi305/MobileNet-SSD/releases/download/v1.0/MobileNetSSD_deploy.caffemodel'
+MODEL_URL = 'https://raw.githubusercontent.com/nikmart/pi-object-detection/refs/heads/master/MobileNetSSD_deploy.caffemodel'
 
 # Local filenames
 PROTO_FILE = 'deploy.prototxt'
