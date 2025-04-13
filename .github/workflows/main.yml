@@ -32,5 +32,5 @@ jobs:
 
       - name: Run car counter
         run: |
-          VIDEO_PATH="./video.mp4"
+          VIDEO_PATH="video.mp4"
           python count_cars.py $VIDEO_PATH
